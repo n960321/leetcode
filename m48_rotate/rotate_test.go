@@ -46,17 +46,22 @@ func rotate_V1(matrix [][]int) {
 }
 
 func rotate(matrix [][]int) {
-	if len(matrix) == 0 || len(matrix) != len(matrix[0]) {
-		return
-	}
-	for layer := 0; layer < len(matrix)/2; layer++ {
-		first, last := layer, len(matrix)-1-layer
-		for i, j := first, last; i < last; i, j = i+1, j-1 {
-			topLeft := matrix[first][i]
-			matrix[first][i] = matrix[j][first]
-			matrix[j][first] = matrix[last][j]
-			matrix[last][j] = matrix[i][last]
-			matrix[i][last] = topLeft
+	// m'(i,j) = m(n-1-j, i)
+	// layer by layer
+	n := len(matrix)
+	for i := 0; i < (n+1)/2; i++ {
+		for j := i; j < n-1-i; j++ {
+			x, y, temp := i, j, matrix[i][j]
+			// rotate four numbers
+			for {
+				if n-1-y == i && x == j {
+					matrix[x][y] = temp
+					break
+				}
+				matrix[x][y] = matrix[n-1-y][x]
+				x, y = n-1-y, x
+			}
+
 		}
 	}
 }
